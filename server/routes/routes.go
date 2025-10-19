@@ -13,17 +13,8 @@ func SetupRoutes(r *gin.Engine) {
     })
   })
 
-	r.POST("/api/register", controllers.Register)
-	r.POST("/api/login", controllers.Login)
-
-	auth := r.Group("/api")
-	auth.Use(middleware.AuthMiddleware())
-	{
-		auth.GET("/me", func(c *gin.Context) {
-			userID, _ := c.Get("user_id")
-			c.JSON(200, gin.H{"user_id": userID})
-		})
-	}
+	r.POST("/api/auth/register", controllers.Register)
+	r.POST("/api/auth/login", controllers.Login)
 
 	r.POST("/api/courts", controllers.CreateCourt)
 	r.GET("/api/courts", controllers.GetCourts)
@@ -41,6 +32,7 @@ func SetupRoutes(r *gin.Engine) {
 
 	r.GET("/api/reservations", middleware.AuthMiddleware(), controllers.GetUserReservations)
 	r.POST("/api/reservations", middleware.AuthMiddleware(), controllers.CreateReservation)
+	r.PUT("/api/reservations/:id", middleware.AuthMiddleware(), controllers.CancelReservation)
 
 	r.POST("/api/payments/create", middleware.AuthMiddleware(), controllers.CreatePayment)
 	r.POST("/api/payments/notification", middleware.AuthMiddleware(), controllers.PaymentNotification)

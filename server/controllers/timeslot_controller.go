@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/dandimuzaki/badminton-server/initializers"
 	"github.com/dandimuzaki/badminton-server/models"
@@ -20,22 +19,9 @@ func CreateTimeslot(c *gin.Context) {
 		return
 	}
 
-	// Parse input string (e.g. "08:00") into time.Time
-	start, err := time.Parse("15:04", body.StartTime)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid startTime format, use HH:MM"})
-		return
-	}
-
-	end, err := time.Parse("15:04", body.EndTime)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid endTime format, use HH:MM"})
-		return
-	}
-
 	timeslot := models.Timeslot{
-		StartTime: start,
-		EndTime:   end,
+		StartTime: body.StartTime,
+		EndTime:   body.EndTime,
 	}
 
 	if err := initializers.DB.Create(&timeslot).Error; err != nil {
@@ -48,7 +34,6 @@ func CreateTimeslot(c *gin.Context) {
 		"data":    timeslot,
 	})
 }
-
 
 func GetTimeslots(c *gin.Context) {
 	var timeslots []models.Timeslot

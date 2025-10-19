@@ -26,7 +26,7 @@ func GetAvailableCourts(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, courts)
+	c.JSON(http.StatusOK, gin.H{"data": courts})
 }
 
 func GetAvailableTimeslots(c *gin.Context) {
@@ -54,5 +54,5 @@ func GetAvailableTimeslots(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, timeslots)
+	c.JSON(http.StatusOK, gin.H{"data": timeslots})
 }

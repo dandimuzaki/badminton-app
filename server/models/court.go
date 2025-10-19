@@ -5,6 +5,9 @@ import "time"
 type Court struct {
 	ID        uint      `json:"id" gorm:"primaryKey"`
 	Name      string    `json:"name"`
+	ImageURL	string 		`json:"imageUrl"`
+	Type      string    `json:"type"`
+	Description      string    `json:"description"`
 	Location  string    `json:"location"`
 	Price 		float64 	`json:"price"`
 	CreatedAt time.Time `json:"createdAt"`

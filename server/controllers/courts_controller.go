@@ -10,9 +10,12 @@ import (
 
 func CreateCourt(c *gin.Context) {
 	var body struct {
-		Name     string `json:"name"`
-		Location string `json:"location"`
-		Price    float64 `json:"price"`
+		Name      string    `json:"name"`
+	ImageURL	string 		`json:"imageUrl"`
+	Type      string    `json:"type"`
+	Description      string    `json:"description"`
+	Location  string    `json:"location"`
+	Price 		float64 	`json:"price"`
 	}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -21,7 +24,10 @@ func CreateCourt(c *gin.Context) {
 	}
 
 	court := models.Court{
-		Name: body.Name, 
+		Name: body.Name,
+		ImageURL: body.ImageURL,
+		Type: body.Type,
+		Description: body.Description,
 		Location: body.Location, 
 		Price: body.Price,
 	}
@@ -54,9 +60,12 @@ func UpdateCourt(c *gin.Context) {
 
 	// Bind JSON body
 	var body struct {
-		Name     string `json:"name"`
-		Location string `json:"location"`
-		Price		 float64 `json:"price"`
+		Name      string    `json:"name"`
+	ImageURL	string 		`json:"imageUrl"`
+	Type      string    `json:"type"`
+	Description      string    `json:"description"`
+	Location  string    `json:"location"`
+	Price 		float64 	`json:"price"`
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -72,6 +81,9 @@ func UpdateCourt(c *gin.Context) {
 
 	// Update fields
 	court.Name = body.Name
+	court.ImageURL = body.ImageURL
+	court.Type = body.Type
+	court.Description = body.Description
 	court.Location = body.Location
 	court.Price = body.Price
 
