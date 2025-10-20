@@ -67,7 +67,7 @@ export default function MyReservationPage() {
   }, [token])
 
   return (
-    <div className="bg-[var(--primary)] pt-36 min-h-screen">
+    <div className="pt-36 p-20 min-h-screen">
       <section>
         <div className="grid lg:grid-cols-2 md:grid-cols-2 md:gap-6 gap-4">
           {reservations?.map((reservation) =>
