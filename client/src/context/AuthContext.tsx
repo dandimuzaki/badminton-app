@@ -1,11 +1,12 @@
 "use client";
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { login as loginService } from "@/services/authService";
+import { login as loginService, register as registerService } from "@/services/authService";
 
 type AuthContextType = {
   user: unknown;
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -21,6 +22,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (savedToken) setToken(savedToken);
     if (savedUser) setUser(JSON.parse(savedUser));
   }, []);
+
+  const register = async (name: string, email: string, password: string) => {
+    await registerService(name, email, password)
+  }
 
   const login = async (email: string, password: string) => {
     const data = await loginService(email, password);
@@ -38,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

@@ -82,7 +82,7 @@ export default function BookPage() {
     }
 
     // STEP 4: Trigger Midtrans payment popup
-    window.snap.pay(payment.data.snapToken, {
+    window.snap.pay(payment.snapToken, {
       onSuccess: async function (result) {
         console.log("✅ Payment success:", result);
         alert("Payment successful!");
@@ -167,7 +167,7 @@ export default function BookPage() {
 
         <button
           type="submit"
-          className="flex justify-center col-span-2 w-fit py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400"
+          className="flex justify-center col-span-2 w-fit py-2 px-4 font-bold bg-[var(--primary)] text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400"
         >
           Pay Now
         </button>
