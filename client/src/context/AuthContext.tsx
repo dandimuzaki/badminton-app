@@ -2,8 +2,14 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { login as loginService, register as registerService } from "@/services/authService";
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 type AuthContextType = {
-  user: unknown;
+  user: User | null;
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
@@ -13,7 +19,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<unknown>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {

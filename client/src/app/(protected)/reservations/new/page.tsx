@@ -107,8 +107,9 @@ export default function BookPage() {
 
 
   return (
-    <div className="md:pt-36 pt-24 p-8 md:p-20 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Book a Badminton Court</h1>
+    <div className="md:pt-28 pt-20 px-8 py-4 md:px-20 md:py-16 min-h-screen">
+      <h1 className="text-center text-2xl font-bold mb-2">Book a Badminton Court</h1>
+      <p className="mb-10 text-center">Choose your preferred date, time, and court.</p>
       <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-4">
         {/* Date Input */}
         <div>
@@ -167,7 +168,7 @@ export default function BookPage() {
 
         <button
           type="submit"
-          className="flex justify-center col-span-2 w-fit py-2 px-4 font-bold bg-[var(--primary)] text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400"
+          className="mt-8 flex justify-self-center col-span-2 w-fit py-2 px-4 font-bold bg-[var(--primary)] text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400"
         >
           Pay Now
         </button>
