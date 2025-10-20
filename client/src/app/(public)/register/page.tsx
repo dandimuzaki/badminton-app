@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Visibility } from '@mui/icons-material';
 import { useAuth } from "@/context/AuthContext";
@@ -33,7 +33,6 @@ export default function RegisterPage() {
 
   return (
     <div className="bg-[var(--primary)] p-20 min-h-screen">
-      <Suspense fallback={<div>Loading...</div>}>      
       <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
 
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg max-w-md mx-auto space-y-4">
@@ -111,7 +110,6 @@ export default function RegisterPage() {
           </a>
         </p>
       </form>
-      </Suspense>
     </div>
   );
 }
