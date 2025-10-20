@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Visibility } from '@mui/icons-material';
 import { useAuth } from "@/context/AuthContext";
@@ -35,6 +35,7 @@ export default function LoginPage() {
 
   return (
     <div className="bg-[var(--primary)] pt-36 min-h-screen">
+      <Suspense fallback={<div>Loading...</div>}>
       <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg max-w-md mx-auto space-y-4">
@@ -83,6 +84,7 @@ export default function LoginPage() {
           </a>
         </p>
       </form>
+      </Suspense>
     </div>
   );
 }
