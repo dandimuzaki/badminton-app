@@ -57,53 +57,53 @@ export default function BookPage() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    // STEP 1: Create reservation
-    const dataReservation = {
-      date,
-      courtId: Number(selectedCourt),
-      timeSlotId: Number(selectedSlot),
-    };
-    const reservation = await createReservation(dataReservation);
+    try {
+      // STEP 1: Create reservation
+      const dataReservation = {
+        date,
+        courtId: Number(selectedCourt),
+        timeSlotId: Number(selectedSlot),
+      };
+      const reservation = await createReservation(dataReservation);
 
-    // STEP 2: Create payment
-    const dataPayment = {
-      reservationId: reservation.data.id,
-      amount: selectedPrice,
-    };
-    const payment = await createPayment(dataPayment);
+      // STEP 2: Create payment
+      const dataPayment = {
+        reservationId: reservation.data.id,
+        amount: selectedPrice,
+      };
+      const payment = await createPayment(dataPayment);
 
-    // STEP 3: Ensure Snap is loaded
-    if (typeof window.snap === "undefined") {
-      alert("Midtrans Snap is not loaded yet. Please refresh.");
-      return;
+      // STEP 3: Ensure Snap is loaded
+      if (typeof window.snap === "undefined") {
+        alert("Midtrans Snap is not loaded yet. Please refresh.");
+        return;
+      }
+
+      // STEP 4: Trigger Midtrans payment popup
+      window.snap.pay(payment.snapToken, {
+        onSuccess: async function (result) {
+          console.log("✅ Payment success:", result);
+          alert("Payment successful!");
+        },
+        onPending: function (result) {
+          console.log("⏳ Payment pending:", result);
+          alert("Payment pending. Please wait for confirmation.");
+        },
+        onError: function (result) {
+          console.error("❌ Payment error:", result);
+          alert("Payment failed. Please try again.");
+        },
+        onClose: function () {
+          console.log("⚠️ Payment popup closed before finishing");
+        },
+      });
+    } catch (err) {
+      console.error("Failed to create reservation or payment:", err);
+      alert("Something went wrong while processing your payment.");
     }
-
-    // STEP 4: Trigger Midtrans payment popup
-    window.snap.pay(payment.snapToken, {
-      onSuccess: async function (result) {
-        console.log("✅ Payment success:", result);
-        alert("Payment successful!");
-      },
-      onPending: function (result) {
-        console.log("⏳ Payment pending:", result);
-        alert("Payment pending. Please wait for confirmation.");
-      },
-      onError: function (result) {
-        console.error("❌ Payment error:", result);
-        alert("Payment failed. Please try again.");
-      },
-      onClose: function () {
-        console.log("⚠️ Payment popup closed before finishing");
-      },
-    });
-  } catch (err) {
-    console.error("Failed to create reservation or payment:", err);
-    alert("Something went wrong while processing your payment.");
-  }
-};
+  };
 
 
   return (
