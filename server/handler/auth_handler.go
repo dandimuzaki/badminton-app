@@ -97,15 +97,19 @@ func Login(c *gin.Context) {
 	secure := isProd
 	serverHost := os.Getenv("SERVER_HOST")
 
-	c.SetCookie(
-    "token",
-    token,
-    3600*24,
-    "/",
-    serverHost,
-    secure,
-    true,
-	)
+	cookie := http.Cookie{
+		Name:     "token",
+		Value:    token,
+		Path:     "/",
+		Domain:   "badminton-app-production.up.railway.app",
+		MaxAge:   3600 * 24,
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+  }
+
+  http.SetCookie(c.Writer, &cookie)
+	
 	log.Printf(serverHost, secure)
 	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user": safeUser, "token": token})
 }
