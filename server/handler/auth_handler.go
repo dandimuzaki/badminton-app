@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -93,8 +94,18 @@ func Login(c *gin.Context) {
 	}
 
 	isProd := os.Getenv("ENV") == "production"
-	secure := isProd // secure=true only in prod
+	secure := isProd
+	serverHost := os.Getenv("SERVER_HOST")
 
-	c.SetCookie("token", token, 3600*24, "/", "", secure, true)
+	c.SetCookie(
+    "token",
+    token,
+    3600*24,
+    "/",
+    serverHost,
+    secure,
+    true,
+	)
+	log.Printf(serverHost, secure)
 	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user": safeUser, "token": token})
 }
