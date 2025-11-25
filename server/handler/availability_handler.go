@@ -1,10 +1,10 @@
-package controllers
+package handler
 
 import (
 	"net/http"
 
 	"github.com/dandimuzaki/badminton-server/initializers"
-	"github.com/dandimuzaki/badminton-server/models"
+	"github.com/dandimuzaki/badminton-server/model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,10 +12,10 @@ func GetAvailableCourts(c *gin.Context) {
 	date := c.Query("date")
 	timeslotID := c.Query("timeSlotId")
 
-	var courts []models.Court
+	var courts []model.Court
 
 	// Use subquery to exclude booked courts
-	subQuery := initializers.DB.Model(&models.Reservation{}).
+	subQuery := initializers.DB.Model(&model.Reservation{}).
 		Select("court_id").
 		Where("date = ? AND time_slot_id = ? AND status = ?", date, timeslotID, "pending")
 
@@ -32,15 +32,15 @@ func GetAvailableCourts(c *gin.Context) {
 func GetAvailableTimeslots(c *gin.Context) {
 	date := c.Query("date")
 
-	var timeslots []models.Timeslot
+	var timeslots []model.Timeslot
 
 	// First, count total courts
 	var totalCourts int64
-	initializers.DB.Model(&models.Court{}).Count(&totalCourts)
+	initializers.DB.Model(&model.Court{}).Count(&totalCourts)
 
 	// Subquery: timeslot IDs that are fully booked
 	subQuery := initializers.DB.
-		Model(&models.Reservation{}).
+		Model(&model.Reservation{}).
 		Select("time_slot_id").
 		Where("date = ? AND status = ?", date, "pending").
 		Group("time_slot_id").

@@ -1,10 +1,10 @@
-package controllers
+package handler
 
 import (
 	"net/http"
 
 	"github.com/dandimuzaki/badminton-server/initializers"
-	"github.com/dandimuzaki/badminton-server/models"
+	"github.com/dandimuzaki/badminton-server/model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,7 +19,7 @@ func CreateTimeslot(c *gin.Context) {
 		return
 	}
 
-	timeslot := models.Timeslot{
+	timeslot := model.Timeslot{
 		StartTime: body.StartTime,
 		EndTime:   body.EndTime,
 	}
@@ -36,14 +36,14 @@ func CreateTimeslot(c *gin.Context) {
 }
 
 func GetTimeslots(c *gin.Context) {
-	var timeslots []models.Timeslot
+	var timeslots []model.Timeslot
 	initializers.DB.Find(&timeslots)
 	c.JSON(http.StatusOK, gin.H{"data": timeslots})
 }
 
 func GetTimeslotByID(c *gin.Context) {
 	id := c.Param("id")
-	var timeslot models.Timeslot
+	var timeslot model.Timeslot
 	if err := initializers.DB.First(&timeslot, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Timeslot not found"})
 		return
@@ -55,7 +55,7 @@ func DeleteTimeslot(c *gin.Context) {
 	id := c.Param("id")
 
 	// Check if court exists first
-	var timeslot models.Timeslot
+	var timeslot model.Timeslot
 	if err := initializers.DB.First(&timeslot, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Timeslot not found"})
 		return

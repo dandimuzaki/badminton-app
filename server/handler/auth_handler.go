@@ -1,10 +1,10 @@
-package controllers
+package handler
 
 import (
 	"net/http"
 
 	"github.com/dandimuzaki/badminton-server/initializers"
-	"github.com/dandimuzaki/badminton-server/models"
+	"github.com/dandimuzaki/badminton-server/model"
 	"github.com/dandimuzaki/badminton-server/utils"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -29,7 +29,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user := models.User{
+	user := model.User{
 		Name:     input.Name,
 		Email:    input.Email,
 		Password: string(hashedPassword),
@@ -68,7 +68,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var user models.User
+	var user model.User
 	if err := initializers.DB.First(&user, "email = ?", input.Email).Error; err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return

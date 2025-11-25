@@ -1,21 +1,21 @@
-package controllers
+package handler
 
 import (
 	"net/http"
 
 	"github.com/dandimuzaki/badminton-server/initializers"
-	"github.com/dandimuzaki/badminton-server/models"
+	"github.com/dandimuzaki/badminton-server/model"
 	"github.com/gin-gonic/gin"
 )
 
 func CreateCourt(c *gin.Context) {
 	var body struct {
 		Name      string    `json:"name"`
-	ImageURL	string 		`json:"imageUrl"`
-	Type      string    `json:"type"`
-	Description      string    `json:"description"`
-	Location  string    `json:"location"`
-	Price 		float64 	`json:"price"`
+		ImageURL	string 		`json:"imageUrl"`
+		Type      string    `json:"type"`
+		Description      string    `json:"description"`
+		Location  string    `json:"location"`
+		Price 		float64 	`json:"price"`
 	}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -23,7 +23,7 @@ func CreateCourt(c *gin.Context) {
 		return
 	}
 
-	court := models.Court{
+	court := model.Court{
 		Name: body.Name,
 		ImageURL: body.ImageURL,
 		Type: body.Type,
@@ -40,14 +40,14 @@ func CreateCourt(c *gin.Context) {
 }
 
 func GetCourts(c *gin.Context) {
-	var courts []models.Court
+	var courts []model.Court
 	initializers.DB.Find(&courts)
 	c.JSON(http.StatusOK, gin.H{"data": courts})
 }
 
 func GetCourtByID(c *gin.Context) {
 	id := c.Param("id")
-	var court models.Court
+	var court model.Court
 	if err := initializers.DB.First(&court, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Court not found"})
 		return
@@ -73,7 +73,7 @@ func UpdateCourt(c *gin.Context) {
 	}
 
 	// Find existing court
-	var court models.Court
+	var court model.Court
 	if err := initializers.DB.First(&court, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Court not found"})
 		return
@@ -102,7 +102,7 @@ func DeleteCourt(c *gin.Context) {
 	id := c.Param("id")
 
 	// Check if court exists first
-	var court models.Court
+	var court model.Court
 	if err := initializers.DB.First(&court, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Court not found"})
 		return

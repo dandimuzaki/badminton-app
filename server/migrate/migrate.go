@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/dandimuzaki/badminton-server/initializers"
-	"github.com/dandimuzaki/badminton-server/models"
+	"github.com/dandimuzaki/badminton-server/model"
 )
 
 func init() {
@@ -12,10 +12,10 @@ func init() {
 
 func main() {
 	initializers.DB.AutoMigrate(
-		&models.User{}, 
-		&models.Court{}, 
-		&models.Timeslot{}, 
-		&models.Reservation{}, 
-		&models.Payment{},
+		&model.User{}, 
+		&model.Court{}, 
+		&model.Timeslot{}, 
+		&model.Reservation{}, 
+		&model.Payment{},
 	)
 }

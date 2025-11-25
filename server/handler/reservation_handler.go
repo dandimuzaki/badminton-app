@@ -1,11 +1,11 @@
-package controllers
+package handler
 
 import (
 	"net/http"
 	"time"
 
 	"github.com/dandimuzaki/badminton-server/initializers"
-	"github.com/dandimuzaki/badminton-server/models"
+	"github.com/dandimuzaki/badminton-server/model"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -34,7 +34,7 @@ func CreateReservation(c *gin.Context) {
 	}
 
 	// Check if timeslot already booked for that court
-	var existing models.Reservation
+	var existing model.Reservation
 	if err := initializers.DB.
 		Where("court_id = ? AND date = ? AND time_slot_id = ?", body.CourtID, resDate, body.TimeSlotID).
 		First(&existing).Error; err == nil {
@@ -43,7 +43,7 @@ func CreateReservation(c *gin.Context) {
 	}
 
 	// Create reservation with "pending" status
-	reservation := models.Reservation{
+	reservation := model.Reservation{
 		UserID:     userID.(uint),
 		CourtID:    body.CourtID,
 		Date:       resDate,
@@ -56,7 +56,7 @@ func CreateReservation(c *gin.Context) {
 		return
 	}
 
-	var fullReservation models.Reservation
+	var fullReservation model.Reservation
 	initializers.DB.Preload("User").Preload("Court").Preload("Timeslot").Preload("Payment").
 		First(&fullReservation, reservation.ID)
 
@@ -70,7 +70,7 @@ func CreateReservation(c *gin.Context) {
 func GetUserReservations(c *gin.Context) {
 	userID := c.GetUint("user_id")
 
-	var reservations []models.Reservation
+	var reservations []model.Reservation
 	if err := initializers.DB.
 		Where("user_id = ?", userID).
 		Preload("User").
@@ -94,7 +94,7 @@ func CancelReservation(c *gin.Context) {
 	id := c.Param("id")
 	userID := c.GetUint("user_id")
 
-	var reservation models.Reservation
+	var reservation model.Reservation
 	if err := initializers.DB.First(&reservation, "id = ? AND user_id = ?", id, userID).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Reservation not found"})
@@ -119,7 +119,7 @@ func CancelReservation(c *gin.Context) {
 
 // AdminGetAllReservations (optional) – admin dashboard
 func AdminGetAllReservations(c *gin.Context) {
-	var reservations []models.Reservation
+	var reservations []model.Reservation
 	if err := initializers.DB.
 		Preload("User").
 		Preload("Court").

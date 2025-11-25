@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/dandimuzaki/badminton-server/controllers"
+	"github.com/dandimuzaki/badminton-server/handler"
 	"github.com/dandimuzaki/badminton-server/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -13,27 +13,27 @@ func SetupRoutes(r *gin.Engine) {
     })
   })
 
-	r.POST("/api/auth/register", controllers.Register)
-	r.POST("/api/auth/login", controllers.Login)
+	r.POST("/api/auth/register", handler.Register)
+	r.POST("/api/auth/login", handler.Login)
 
-	r.POST("/api/courts", controllers.CreateCourt)
-	r.GET("/api/courts", controllers.GetCourts)
-	r.GET("/api/courts/:id", controllers.GetCourtByID)
-	r.PUT("/api/courts/:id", controllers.UpdateCourt)
-	r.DELETE("/api/courts/:id", controllers.DeleteCourt)
+	r.POST("/api/courts", handler.CreateCourt)
+	r.GET("/api/courts", handler.GetCourts)
+	r.GET("/api/courts/:id", handler.GetCourtByID)
+	r.PUT("/api/courts/:id", handler.UpdateCourt)
+	r.DELETE("/api/courts/:id", handler.DeleteCourt)
 
-	r.GET("/api/timeslots", controllers.GetTimeslots)
-	r.GET("/api/timeslots/:id", controllers.GetTimeslotByID)
-	r.POST("/api/timeslots", controllers.CreateTimeslot)
-	r.DELETE("/api/timeslots/:id", controllers.DeleteTimeslot)
+	r.GET("/api/timeslots", handler.GetTimeslots)
+	r.GET("/api/timeslots/:id", handler.GetTimeslotByID)
+	r.POST("/api/timeslots", handler.CreateTimeslot)
+	r.DELETE("/api/timeslots/:id", handler.DeleteTimeslot)
 
-	r.GET("/api/available-timeslots", controllers.GetAvailableTimeslots)
-	r.GET("/api/available-courts", controllers.GetAvailableCourts)
+	r.GET("/api/available-timeslots", handler.GetAvailableTimeslots)
+	r.GET("/api/available-courts", handler.GetAvailableCourts)
 
-	r.GET("/api/reservations", middleware.AuthMiddleware(), controllers.GetUserReservations)
-	r.POST("/api/reservations", middleware.AuthMiddleware(), controllers.CreateReservation)
-	r.PUT("/api/reservations/:id", middleware.AuthMiddleware(), controllers.CancelReservation)
+	r.GET("/api/reservations", middleware.AuthMiddleware(), handler.GetUserReservations)
+	r.POST("/api/reservations", middleware.AuthMiddleware(), handler.CreateReservation)
+	r.PUT("/api/reservations/:id", middleware.AuthMiddleware(), handler.CancelReservation)
 
-	r.POST("/api/payments/create", middleware.AuthMiddleware(), controllers.CreatePayment)
-	r.POST("/api/payments/notification", middleware.AuthMiddleware(), controllers.PaymentNotification)
+	r.POST("/api/payments/create", middleware.AuthMiddleware(), handler.CreatePayment)
+	r.POST("/api/payments/notification", middleware.AuthMiddleware(), handler.PaymentNotification)
 }

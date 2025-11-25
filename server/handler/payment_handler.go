@@ -1,4 +1,4 @@
-package controllers
+package handler
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/dandimuzaki/badminton-server/initializers"
-	"github.com/dandimuzaki/badminton-server/models"
+	"github.com/dandimuzaki/badminton-server/model"
 	"github.com/gin-gonic/gin"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
@@ -25,7 +25,7 @@ func CreatePayment(c *gin.Context) {
 		return
 	}
 
-	var reservation models.Reservation
+	var reservation model.Reservation
 	if err := initializers.DB.Preload("Court").First(&reservation, "id = ?", body.ReservationID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Reservation not found"})
 		return
@@ -35,7 +35,7 @@ func CreatePayment(c *gin.Context) {
 		return
 	}
 
-	var user models.User
+	var user model.User
 	if err := initializers.DB.First(&user, userId).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
@@ -81,7 +81,7 @@ func CreatePayment(c *gin.Context) {
 	}
 
 	// ✅ Save payment record
-	payment := models.Payment{
+	payment := model.Payment{
 		UserID:        userId,
 		ReservationID: reservation.ID,
 		Amount:        body.Amount,
@@ -109,17 +109,17 @@ func PaymentNotification(c *gin.Context) {
 
 	switch status {
 	case "settlement":
-		initializers.DB.Model(&models.Payment{}).
+		initializers.DB.Model(&model.Payment{}).
 			Where("transaction_id = ?", orderID).
 			Update("status", "success")
 
-		initializers.DB.Model(&models.Reservation{}).
+		initializers.DB.Model(&model.Reservation{}).
 			Joins("JOIN payments ON payments.reservation_id = reservations.id").
 			Where("payments.transaction_id = ?", orderID).
 			Update("reservations.status", "paid")
 
 	case "cancel", "expire", "deny":
-		initializers.DB.Model(&models.Payment{}).
+		initializers.DB.Model(&model.Payment{}).
 			Where("transaction_id = ?", orderID).
 			Update("status", status)
 	}

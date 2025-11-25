@@ -5,6 +5,7 @@ import Link from "next/link";
 import logo from "./../../public/images/shuttletime_logo.webp"
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { getFirstName } from "@/utils/format";
 
 export default function Navbar() {
   const { user } = useAuth()
@@ -28,12 +29,12 @@ export default function Navbar() {
       </Link>
       <div className="flex items-center gap-2 py-4 text-lg">
         <Link href="/" className="rounded px-3 py-1 hover:bg-[var(--primary-dark)]">Home</Link>
-        <Link href="#courts" className="rounded px-3 py-1 hover:bg-[var(--primary-dark)]">Courts</Link>
         <Link href="/reservations" className="rounded px-3 py-1 hover:bg-[var(--primary-dark)]">My Reservations</Link>
       </div>
-      {user ? (
-        <p>Hi, {user.name}!</p>
-      ) : (<div className="flex items-center gap-4 text-lg">
+      {user ? (<div className="flex items-center gap-4 text-lg">
+        <Link href="/reservations/new" className="border-2 border-white px-3 py-1 rounded hover:bg-white hover:text-[var(--primary)]">Book Now</Link>
+        <p className="rounded px-3 py-1 hover:bg-[var(--primary-dark)] hover:border-[var(--primary-dark)] border-2 border-transparent">Hi {getFirstName(user.name)}!</p>
+      </div>) : (<div className="flex items-center gap-4 text-lg">
         <Link href="/login" className="border-2 border-white px-3 py-1 rounded hover:bg-white hover:text-[var(--primary)]">Login</Link>
         <Link href="/register" className="rounded px-3 py-1 hover:bg-[var(--primary-dark)] hover:border-[var(--primary-dark)] border-2 border-transparent">Register</Link>
       </div>)}
