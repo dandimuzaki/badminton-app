@@ -19,9 +19,6 @@ func main() {
 	r := gin.Default()
 
 	client := os.Getenv("CLIENT_HOST")
-	if client == "" {
-		client = "https://badminton-server-sand.vercel.app"
-	}
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000", client},
