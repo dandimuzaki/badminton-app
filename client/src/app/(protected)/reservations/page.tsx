@@ -82,7 +82,7 @@ export default function MyReservationPage() {
         <div className="grid lg:grid-cols-2 md:grid-cols-2 md:gap-6 gap-4">
           {reservations?.map((reservation) =>
             <div key={reservation.id} className="md:p-4 p-2 rounded-lg bg-white flex md:gap-4 gap-2 shadow-[0_2px_10px_2px_rgba(0,0,0,0.1)]">
-              <Image src={reservation.Court.imageUrl} alt={reservation.Court.name} width={500} height={250} className="rounded w-48 h-full object-cover"/>
+              <Image onClick={() => console.log(reservation)} src={reservation.Court.imageUrl} alt={reservation.Court.name} width={500} height={250} className="rounded w-48 h-full object-cover"/>
                 <div className="flex-1 grid gap-2">
                 <div
                 className={`${reservation.status === "cancelled" ? "bg-red-200 text-red-800" : reservation.status === "confirmed" ? "bg-green-200 text-green-800" : "bg-yellow-200 text-yellow-800" } w-fit px-2 py-1 rounded`}
