@@ -72,7 +72,7 @@ func GetUserReservations(c *gin.Context) {
 
 	var reservations []model.Reservation
 	if err := initializers.DB.
-		Where("UserID = ?", userID).
+		Where("user_id = ?", userID).
 		Preload("User").
 		Preload("Court").
 		Preload("Timeslot").
