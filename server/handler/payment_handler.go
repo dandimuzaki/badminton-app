@@ -104,24 +104,33 @@ func PaymentNotification(c *gin.Context) {
 		return
 	}
 
-	orderID, _ := payload["order_id"].(string)
-	status, _ := payload["transaction_status"].(string)
+	orderID := payload["order_id"].(string)
+	status := payload["transaction_status"].(string)
 
-	switch status {
-	case "settlement":
-		initializers.DB.Model(&model.Payment{}).
-			Where("transaction_id = ?", orderID).
-			Update("status", "success")
+	// Update payment status
+	initializers.DB.Model(&model.Payment{}).
+		Where("transaction_id = ?", orderID). // your DB stores orderID here
+		Update("status", status)
 
-		initializers.DB.Model(&model.Reservation{}).
-			Joins("JOIN payments ON payments.reservation_id = reservations.id").
-			Where("payments.transaction_id = ?", orderID).
-			Update("reservations.status", "paid")
+	// Update reservation
+	if status == "settlement" || status == "capture" {
+		initializers.DB.Exec(`
+			UPDATE reservations 
+			SET status = 'paid'
+			WHERE id = (
+				SELECT reservation_id FROM payments WHERE transaction_id = ?
+			)
+		`, orderID)
+	}
 
-	case "cancel", "expire", "deny":
-		initializers.DB.Model(&model.Payment{}).
-			Where("transaction_id = ?", orderID).
-			Update("status", status)
+	if status == "cancel" || status == "expire" || status == "deny" {
+		initializers.DB.Exec(`
+			UPDATE reservations 
+			SET status = 'failed'
+			WHERE id = (
+				SELECT reservation_id FROM payments WHERE transaction_id = ?
+			)
+		`, orderID)
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
