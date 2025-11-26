@@ -1,9 +1,7 @@
 package handler
 
 import (
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/dandimuzaki/badminton-server/initializers"
 	"github.com/dandimuzaki/badminton-server/model"
@@ -93,19 +91,16 @@ func Login(c *gin.Context) {
 		Email: user.Email,
 	}
 
-	isProd := os.Getenv("ENV") == "production"
-	secure := isProd
-	serverHost := os.Getenv("SERVER_HOST")
+	http.SetCookie(c.Writer, &http.Cookie{
+    Name:     "token",
+    Value:    token,
+    Path:     "/",
+    MaxAge:   3600 * 24,
+    HttpOnly: true,
+    Secure:   true,
+    SameSite: http.SameSiteNoneMode,
+    Domain:   "badminton-app-production.up.railway.app",
+})
 
-	c.SetCookie(
-    "token",
-    token,
-    3600*24,
-    "/",
-    "",
-    true,
-    true,
-	)
-	log.Printf(serverHost, secure)
 	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user": safeUser, "token": token})
 }
