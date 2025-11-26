@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { getReservations } from "@/services/reservationService";
-import { formatDate, formatRupiah } from "@/utils/format";
+import { capitalize, formatDate, formatRupiah } from "@/utils/format";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -86,7 +86,7 @@ export default function MyReservationPage() {
                 <div className="flex-1 grid gap-2">
                 <div
                 className={`${reservation.status === "cancelled" ? "bg-red-200 text-red-800" : reservation.status === "paid" ? "bg-green-200 text-green-800" : "bg-yellow-200 text-yellow-800" } w-fit px-2 py-1 rounded`}
-                >{reservation.status === "pending" ? "Waiting for payment" : reservation.status}</div>
+                >{reservation.status === "pending" ? "Waiting for payment" : capitalize(reservation.status)}</div>
                 <div>
                 <h3 className="text font-bold">{reservation.Court.name}</h3>
                 <p className="text-gray-500 text-sm">{reservation.Court.type}</p>

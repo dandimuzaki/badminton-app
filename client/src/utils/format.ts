@@ -19,3 +19,7 @@ export const getFirstName = (value: string): string => {
   const arr = value.split(" ")
   return arr[0]
 }
+
+export const capitalize = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
