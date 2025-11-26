@@ -81,7 +81,7 @@ export default function MyReservationPage() {
       {loading ? (<p>Loading...</p>) : reservations.length > 0 ? (<section>
         <div className="grid lg:grid-cols-2 md:grid-cols-2 md:gap-6 gap-4">
           {reservations?.map((reservation) =>
-            <div key={reservation.id} className="md:p-4 p-2 rounded-lg bg-white flex md:gap-4 gap-2 shadow-[0_2px_10px_2px_rgba(0,0,0,0.1)]">
+            (<div key={reservation.id} className="md:p-4 p-2 rounded-lg bg-white flex md:gap-4 gap-2 shadow-[0_2px_10px_2px_rgba(0,0,0,0.1)]">
               <Image src={reservation.Court.imageUrl} alt={reservation.Court.name} width={500} height={250} className="rounded w-48 h-full object-cover"/>
                 <div className="flex-1 grid gap-2">
                 <div
@@ -96,9 +96,8 @@ export default function MyReservationPage() {
                 <p className="font-bold">{reservation.Timeslot.startTime} - {reservation.Timeslot.endTime}</p>
                 </div>
                 <p className="font-bold">{formatRupiah(reservation.Court.price)}<span className="text-sm font-medium">/hour</span></p>
-                <button className="w-fit justify-self-end bg-[var(--primary)] text-white font-bold text-lg px-3 py-1 rounded">{reservation.status === "pending" ? "Pay Now" : "Book Again"}</button>
                 </div>
-            </div>
+            </div>)
           )}
         </div>
       </section>)

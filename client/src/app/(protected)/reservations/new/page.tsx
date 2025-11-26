@@ -60,7 +60,6 @@ export default function BookPage() {
     e.preventDefault();
 
     try {
-      // STEP 1: Create reservation
       const dataReservation = {
         date,
         courtId: Number(selectedCourt),
@@ -68,20 +67,17 @@ export default function BookPage() {
       };
       const reservation = await createReservation(dataReservation);
 
-      // STEP 2: Create payment
       const dataPayment = {
         reservationId: reservation.data.id,
         amount: selectedPrice,
       };
       const payment = await createPayment(dataPayment);
 
-      // STEP 3: Ensure Snap is loaded
       if (typeof window.snap === "undefined") {
         alert("Midtrans Snap is not loaded yet. Please refresh.");
         return;
       }
 
-      // STEP 4: Trigger Midtrans payment popup
       window.snap.pay(payment.snapToken, {
         onSuccess: async function (result) {
           console.log("✅ Payment success:", result);
@@ -104,7 +100,6 @@ export default function BookPage() {
       alert("Something went wrong while processing your payment.");
     }
   };
-
 
   return (
     <div className="md:pt-28 pt-20 px-8 py-4 md:px-20 md:py-16 min-h-screen">
