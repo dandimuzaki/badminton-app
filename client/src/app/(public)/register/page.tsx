@@ -100,7 +100,7 @@ export default function RegisterPage() {
           type="submit"
           className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition"
         >
-          Login
+          Register
         </button>
 
         <p className="text-center">
