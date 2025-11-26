@@ -102,8 +102,8 @@ func Login(c *gin.Context) {
     token,
     3600*24,
     "/",
-    serverHost,
-    secure,
+    "",
+    true,
     true,
 	)
 	log.Printf(serverHost, secure)
