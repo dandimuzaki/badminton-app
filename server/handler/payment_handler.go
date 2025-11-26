@@ -9,7 +9,7 @@ import (
 	"github.com/dandimuzaki/badminton-server/model"
 	"github.com/gin-gonic/gin"
 	"github.com/midtrans/midtrans-go"
-	"github.com/midtrans/midtrans-go/snap"
+	"github.com/midtrans/midtrans-go/coreapi"
 )
 
 func CreatePayment(c *gin.Context) {
@@ -37,7 +37,7 @@ func CreatePayment(c *gin.Context) {
 
 	var user model.User
 	if err := initializers.DB.First(&user, userId).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"} )
 		return
 	}
 
@@ -47,19 +47,23 @@ func CreatePayment(c *gin.Context) {
 		return
 	}
 
-	// ✅ Initialize Snap client directly
-	var s = snap.Client{}
-	s.New(os.Getenv("MIDTRANS_SERVER_KEY"), midtrans.Sandbox)
+	// Initialize Core API client (not Snap)
+	coreClient := coreapi.Client{}
+	coreClient.New(serverKey, midtrans.Sandbox)
 
 	orderID := fmt.Sprintf("ORDER-%d-%d", reservation.ID, userId)
 
-	// ✅ Use correct struct names for request
-	req := &snap.Request{
+	// Build charge request for BCA VA
+	chargeReq := &coreapi.ChargeReq{
+		PaymentType: "bank_transfer",
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  orderID,
 			GrossAmt: int64(body.Amount),
 		},
-		CustomerDetail: &midtrans.CustomerDetails{
+		BankTransfer: &coreapi.BankTransferDetails{
+			Bank: midtrans.BankBca, // BCA VA
+		},
+		CustomerDetails: &midtrans.CustomerDetails{
 			FName: user.Name,
 			Email: user.Email,
 		},
@@ -73,14 +77,13 @@ func CreatePayment(c *gin.Context) {
 		},
 	}
 
-	// ✅ Create transaction
-	snapResp, err := s.CreateTransaction(req)
+	chargeResp, err := coreClient.ChargeTransaction(chargeReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// ✅ Save payment record
+	// Save payment record
 	payment := model.Payment{
 		UserID:        userId,
 		ReservationID: reservation.ID,
@@ -90,10 +93,17 @@ func CreatePayment(c *gin.Context) {
 	}
 	initializers.DB.Create(&payment)
 
+	// Extract VA number (varies by response; vaNumbers is common)
+	vaNumber := ""
+	if len(chargeResp.VaNumbers) > 0 {
+		vaNumber = chargeResp.VaNumbers[0].VANumber
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"message":     "Payment created successfully",
-		"snapToken":   snapResp.Token,
-		"redirectUrl": snapResp.RedirectURL,
+		"message":    "Payment created (VA)",
+		"orderId":    orderID,
+		"chargeResp": chargeResp, // helpful for debugging (remove in prod)
+		"vaNumber":   vaNumber,
 	})
 }
 
