@@ -35,5 +35,5 @@ func SetupRoutes(r *gin.Engine) {
 	r.PUT("/api/reservations/:id", middleware.AuthMiddleware(), handler.CancelReservation)
 
 	r.POST("/api/payments/create", middleware.AuthMiddleware(), handler.CreatePayment)
-	r.POST("/api/payments/notification", middleware.AuthMiddleware(), handler.PaymentNotification)
+	r.POST("/api/payments/notification", handler.PaymentNotification)
 }
