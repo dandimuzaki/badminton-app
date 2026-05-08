@@ -1,19 +1,33 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
+
+type ReservationStatus string
+var (
+	ReservationPending ReservationStatus = "pending"
+	ReservationPaid ReservationStatus = "paid"
+	ReservationCheckedIn ReservationStatus = "checked in"
+	ReservationCancelled ReservationStatus = "cancelled"
+	ReservationCompleted ReservationStatus = "completed"
+	ReservationFailed ReservationStatus = "failed"
+)
 
 type Reservation struct {
-	ID         uint       `gorm:"primaryKey" json:"id"`
-	UserID     uint       `json:"userId"`
-	User       User       `gorm:"foreignKey:UserID"`
-	CourtID    uint       `json:"courtId"`
-	Court      Court      `gorm:"foreignKey:CourtID"`
+	gorm.Model
+	UserID     uint       `json:"user_id"`
+	CourtID    uint       `json:"court_id"`
 	Date       time.Time  `json:"date"`
-	TimeSlotID uint       `json:"timeSlotId"`
-	Timeslot   Timeslot   `gorm:"foreignKey:TimeSlotID"`
-	Status     string     `json:"status"` // pending, confirmed, canceled, completed
-	Payment    *Payment   `gorm:"foreignKey:ReservationID"`
-	CreatedAt  time.Time  `json:"createdAt"`
-	UpdatedAt  time.Time  `json:"updatedAt"`
+	TimeSlotID uint       `json:"time_slot_id"`
+	Status     ReservationStatus     `json:"status"`
+
+	// Relations
+	User       User       `gorm:"foreignKey:UserID" json:"user"`
+	Court      Court      `gorm:"foreignKey:CourtID" json:"court"`
+	Timeslot   Timeslot   `gorm:"foreignKey:TimeSlotID" json:"timeslot"`
+	Payment    *Payment   `gorm:"foreignKey:ReservationID" json:"payment"`
 }
 

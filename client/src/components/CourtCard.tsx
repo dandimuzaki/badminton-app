@@ -1,30 +1,21 @@
 "use client";
 
+import { Court } from "@/types/court";
 import { formatRupiah } from "@/utils/format";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Court {
-  id: string;
-  name: string;
-  imageUrl: string;
-  type: string;
-  description: string;
-  price: number;
-}
-
-export default function CourtCard({ c }: {c: Court}) {
+export default function CourtCard({ court }: {court: Court}) {
   return (
-    <div key={c.id} className="md:p-4 p-2 rounded-lg bg-white grid md:gap-4 gap-2 shadow-[0_2px_10px_2px_rgba(0,0,0,0.1)]">
-      <Image src={c.imageUrl} alt={c.name} width={500} height={250} className="w-full h-48 object-cover"/>
-      <div>
-      <h3 className="text-lg font-bold">{c.name}</h3>
-      <p className="text-gray-500 text-sm">{c.type}</p>
+    <div key={court.id} className="space-y-1 md:space-y-3">
+      <Image src={court.imageUrl} alt={court.name} width={500} height={250} className="w-full h-48 object-cover rounded-lg mb-2"/>
+      <div className="space-y-2">
+        <p className="text-sm md:text-sm text-secondary px-3 py-1 rounded bg-secondary/20 w-fit">{court.type}</p>
+        <h3 className="text-lg md:text-xl font-bold">{court.name}</h3>
       </div>
-      <p className="">{c.description}</p>
+      <p className="text-sm md:text-base">{court.description}</p>
       <div className="grid gap-2 md:flex md:justify-between md:items-end">
-      <p className="font-bold text-xl">{formatRupiah(c.price)}<span className="text-sm font-medium">/hour</span></p>
-      <Link href="/reservations/new" className="px-4 py-1 bg-[var(--primary)] font-bold text-white rounded">Book Now</Link>
+        <p className="text-lg md:text-xl">Start from <span className="font-bold">{formatRupiah(court.price)}</span><span className="text-sm font-medium">/hour</span></p>
       </div>
     </div>
   )

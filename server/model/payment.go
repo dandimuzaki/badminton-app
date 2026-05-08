@@ -1,18 +1,23 @@
 package model
 
-import "time"
+import "gorm.io/gorm"
+
+type PaymentStatus string
+var (
+	PaymentPending PaymentStatus = "pending"
+	PaymentSettlement PaymentStatus = "settlement"
+	PaymentCapture PaymentStatus = "capture"
+	PaymentCancel PaymentStatus = "cancel"
+	PaymentExpire PaymentStatus = "expire"
+	PaymentDeny PaymentStatus = "deny"
+)
 
 type Payment struct {
-	ID            uint           `json:"id" gorm:"primaryKey"`
-	UserID        uint           `json:"userId"`
-	ReservationID uint           `json:"reservationId"`
+	gorm.Model
+	UserID        uint           `json:"user_id"`
+	ReservationID uint           `json:"reservation_id"`
 	Reservation   *Reservation   `json:"reservation" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Amount        float64        `json:"amount" gorm:"type:decimal(10,2)"`
-	Status        string         `json:"status" gorm:"default:'pending'"`
-	TransactionID string         `json:"transactionId" gorm:"uniqueIndex"`
-	CreatedAt     time.Time      `json:"createdAt"`
-	UpdatedAt     time.Time      `json:"updatedAt"`
+	Status        PaymentStatus         `json:"status" gorm:"default:'pending'"`
+	TransactionID string         `json:"transaction_id" gorm:"uniqueIndex"`
 }
-
-
-

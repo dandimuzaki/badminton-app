@@ -2,42 +2,139 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import logo from "./../../public/images/shuttletime_logo.webp"
-import { usePathname } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-import { getFirstName } from "@/utils/format";
+import { useState } from "react";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Button } from "./ui/button";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
-  const { user } = useAuth()
-  const pathname = usePathname()
-  const minimalNavRoutes = ["/login", "/register"]
+  const { user } = useAuthStore();
+  const [isOpen, setIsOpen] = useState(false);
 
-  if (minimalNavRoutes.includes(pathname)) {
-    return (
-    <nav className="h-16 flex justify-between items-center px-6 bg-[var(--primary)] text-white font-bold fixed top-0 w-full">
-      <Link href="/">
-        <Image src={logo} alt="badminton-logo" width={180}/>
-      </Link>
-    </nav>
-    )
-  }
+  const menuVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        staggerChildren: 0.1,
+        duration: 0.3,
+      },
+    },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
-    <nav className="z-75 h-16 flex justify-between items-center px-6 bg-[var(--primary)] text-white font-bold fixed top-0 w-full">
+    <nav className="z-50 h-16 flex justify-between items-center px-6 bg-background/80 backdrop-blur-md text-white fixed top-0 w-full">
+      {/* Logo */}
       <Link href="/">
-        <Image src={logo} alt="badminton-logo" width={150}/>
+        <Image
+          src="/images/shuttle-time-logo-trp.png"
+          alt="badminton-logo"
+          width={130}
+          height={80}
+        />
       </Link>
-      <div className="flex items-center gap-2 py-4 text-lg">
-        <Link href="/" className="rounded px-3 py-1 hover:bg-[var(--primary-dark)]">Home</Link>
-        <Link href="/reservations" className="rounded px-3 py-1 hover:bg-[var(--primary-dark)]">My Reservations</Link>
+
+      {/* Desktop */}
+      <ul className="hidden md:flex items-center gap-2 text-secondary">
+        {["home", "about", "court", "testimonial", "contact"].map((item) => (
+          <li
+            key={item}
+            className="hover:font-bold hover:text-primary hover:bg-secondary px-4 py-2 rounded-full transition"
+          >
+            <Link href={`#${item}`}>
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      {/* Right Section */}
+      <div className="hidden md:flex items-center gap-2">
+        {user ? (
+          <Link href="/reservations">
+            <Button className="rounded-full bg-secondary text-white">
+              My Reservations
+            </Button>
+          </Link>
+        ) : (
+          <>
+            <Link href="/login">
+              <Button className="rounded-full">
+                Login
+              </Button>
+            </Link>
+            <Link href="/register">
+              <Button className="rounded-full bg-secondary text-white">
+                Register
+              </Button>
+            </Link>
+          </>
+        )}
       </div>
-      {user ? (<div className="flex items-center gap-4 text-lg">
-        <Link href="/reservations/new" className="border-2 border-white px-3 py-1 rounded hover:bg-white hover:text-[var(--primary)]">Book Now</Link>
-        <p className="rounded px-3 py-1 hover:bg-[var(--primary-dark)] hover:border-[var(--primary-dark)] border-2 border-transparent">Hi {getFirstName(user.name)}!</p>
-      </div>) : (<div className="flex items-center gap-4 text-lg">
-        <Link href="/login" className="border-2 border-white px-3 py-1 rounded hover:bg-white hover:text-[var(--primary)]">Login</Link>
-        <Link href="/register" className="rounded px-3 py-1 hover:bg-[var(--primary-dark)] hover:border-[var(--primary-dark)] border-2 border-transparent">Register</Link>
-      </div>)}
+
+      {/* Mobile Button */}
+      <button
+        className="md:hidden"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ? <X /> : <Menu />}
+      </button>
+
+      {/* Animated Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            variants={menuVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="absolute top-16 left-0 w-full bg-background/95 backdrop-blur-md flex flex-col items-center gap-4 py-6 md:hidden shadow-lg"
+          >
+            {["home", "about", "court", "testimonial", "contact"].map((item) => (
+              <motion.div key={item} variants={itemVariants}>
+                <Link
+                  href={`#${item}`}
+                  onClick={() => setIsOpen(false)}
+                  className="text-secondary text-lg"
+                >
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </Link>
+              </motion.div>
+            ))}
+
+            <motion.div variants={itemVariants} className="flex flex-col gap-2">
+              {user ? (
+                <Link href="/reservations">
+                  <Button className="rounded-full bg-secondary text-white">
+                    My Reservations
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button className="rounded-full">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button className="rounded-full bg-secondary text-white">
+                      Register
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

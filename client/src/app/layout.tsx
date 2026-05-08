@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Josefin_Sans } from "next/font/google";
+import { DM_Sans, Geist } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/context/AuthContext";
 import Script from "next/script";
+import { cn } from "@/lib/utils";
 
-const josefin = Josefin_Sans({
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+
+const dm_sans = DM_Sans({
   subsets: ['latin'],
   weight: ['400', '700'],
 })
@@ -20,12 +22,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
-        className={`${josefin.className} antialiased`}
+        className={`${dm_sans.className} antialiased`}
       >
         <AuthProvider>
-          <Navbar />
           {children}
           <Script
           src="https://app.sandbox.midtrans.com/snap/snap.js"

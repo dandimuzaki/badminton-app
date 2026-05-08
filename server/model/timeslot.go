@@ -1,10 +1,11 @@
 package model
 
-import "time"
+import (
+	"gorm.io/gorm"
+)
 
 type Timeslot struct {
-	ID        uint      `json:"id" gorm:"primaryKey"`
-	StartTime string `json:"startTime"`
-	EndTime   string `json:"endTime"`
-	CreatedAt time.Time `json:"createdAt"`
+	gorm.Model
+	StartTime string `json:"start_time"`
+	EndTime   string `json:"end_time"`
 }

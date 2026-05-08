@@ -1,7 +1,9 @@
 import api from "@/lib/api";
 
-export async function getAvailableTimeslots(query: URLSearchParams) {
+export async function getAvailableTimeslots(query: string) {
+  console.log("query", query)
   const res = await api.get(`/available-timeslots?${query}`);
+  console.log("res", res)
   return res.data;
 }
 
