@@ -20,7 +20,7 @@ export default function useBooking() {
   useEffect(() => {
     if (!date) return
     const fetchSlots = async () => {
-      const res = await getAvailableTimeslots(`date=${dateString}`)
+      const res = await getAvailableTimeslots({date: dateString})
       setTimeSlots(res)
     }
     fetchSlots()
@@ -34,7 +34,7 @@ export default function useBooking() {
     }
 
     const fetchCourts = async () => {
-      const res = await getAvailableCourts(new URLSearchParams({ dateString, timeSlotId: selectedSlot }))
+      const res = await getAvailableCourts({date: dateString, time_slot_id: selectedSlot})
       setCourts(res.data)
       if (res.data.length === 0) {
         setError("No courts available for this time slot")

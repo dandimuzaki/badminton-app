@@ -7,3 +7,8 @@ export interface Court {
   location: string,
   price: number
 }
+
+export interface CourtQuery {
+  date: string,
+  time_slot_id: string
+}
