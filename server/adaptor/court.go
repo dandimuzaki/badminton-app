@@ -43,3 +43,13 @@ func (h *CourtHandler) GetAvailableCourts(c *gin.Context) {
 
 	utils.ResponseSuccess(c, http.StatusOK, "success to get available courts", courts)
 }
+
+func (h *CourtHandler) GetAllCourts(c *gin.Context) {
+	courts, err := h.Usecase.GetAllCourts(c)
+	if err != nil {
+		utils.ResponseFailed(c, http.StatusInternalServerError, "failed to get all courts", err.Error())
+		return
+	}
+
+	utils.ResponseSuccess(c, http.StatusOK, "success to get all courts", courts)
+}

@@ -12,6 +12,7 @@ import (
 
 type CourtRepository interface {
 	GetAvailableCourts(ctx context.Context, req dto.AvailableCourtRequest) ([]model.Court, error)
+	GetAllCourts(ctx context.Context) ([]model.Court, error)
 }
 
 type courtRepository struct {
@@ -37,6 +38,18 @@ func (r *courtRepository) GetAvailableCourts(ctx context.Context, req dto.Availa
 
 	if err := db.
 		Where("id NOT IN (?)", subQuery).
+		Find(&courts).Error; err != nil {
+		return nil, err
+	}
+
+	return courts, nil
+}
+
+func (r *courtRepository) GetAllCourts(ctx context.Context) ([]model.Court, error) {
+	db := infra.GetDB(ctx, r.DB)
+	var courts []model.Court
+
+	if err := db.
 		Find(&courts).Error; err != nil {
 		return nil, err
 	}

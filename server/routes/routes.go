@@ -65,8 +65,9 @@ func ApiV1(r *gin.RouterGroup, handler *adaptor.Handler) {
 	r.POST("/auth/register", handler.AuthHandler.Register)
 	r.POST("/auth/login", handler.AuthHandler.Login)
 
-	r.GET("/timeslots", handler.TimeslotHandler.GetAvailableTimeslots)
-	r.GET("/courts", handler.CourtHandler.GetAvailableCourts)
+	r.GET("/timeslots/available", handler.TimeslotHandler.GetAvailableTimeslots)
+	r.GET("/courts", handler.CourtHandler.GetAllCourts)
+	r.GET("/courts/available", handler.CourtHandler.GetAvailableCourts)
 
 	r.GET("/reservations", middleware.AuthMiddleware(), handler.ReservationHandler.GetReservationHistory)
 	r.POST("/reservations", middleware.AuthMiddleware(), handler.ReservationHandler.CreateReservation)

@@ -11,6 +11,7 @@ import (
 
 type CourtUsecase interface {
 	GetAvailableCourts(ctx context.Context, req dto.AvailableCourtRequest) ([]model.Court, error)
+	GetAllCourts(ctx context.Context) ([]model.Court, error)
 }
 
 type courtUsecase struct {
@@ -27,4 +28,8 @@ func NewCourtUsecase(repo *repository.Repository, log *zap.Logger) CourtUsecase 
 
 func (u *courtUsecase) GetAvailableCourts(ctx context.Context, req dto.AvailableCourtRequest) ([]model.Court, error) {
 	return u.Repo.CourtRepo.GetAvailableCourts(ctx, req)
+}
+
+func (u *courtUsecase) GetAllCourts(ctx context.Context) ([]model.Court, error) {
+	return u.Repo.CourtRepo.GetAllCourts(ctx)
 }
