@@ -5,8 +5,6 @@ import SectionBadge from "@/components/home/section-badge";
 import ServiceSection from "@/components/home/service";
 import TestimonialCard from "@/components/home/testimonial-card";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext";
-import { mockCourts } from "@/mocks/court";
 import { testimonials } from "@/mocks/testimonial";
 import { getCourts } from "@/services/courtService";
 import { Court } from "@/types/court";
@@ -16,7 +14,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const { token } = useAuth()
   const [courts, setCourts] = useState<Court[]>([])
 
   const fetchCourts = async () => {

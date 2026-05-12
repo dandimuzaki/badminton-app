@@ -1,7 +1,6 @@
 "use client";
 
 import { Testimonial } from "@/mocks/testimonial";
-import { FormatQuote } from "@mui/icons-material";
 import Image from "next/image";
 
 export default function TestimonialCard({ testimonial }: {testimonial: Testimonial}) {
