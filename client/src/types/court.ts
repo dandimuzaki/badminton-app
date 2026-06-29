@@ -1,7 +1,7 @@
 export interface Court {
   id: number,
   name: string,
-  imageUrl: string,
+  image_url: string,
   type: string,
   description: string,
   location: string,

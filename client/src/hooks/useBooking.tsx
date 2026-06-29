@@ -3,7 +3,9 @@
 import { getAvailableCourts, getAvailableTimeslots } from "@/services/availabilityService"
 import { createPayment } from "@/services/paymentService"
 import { createReservation } from "@/services/reservationService"
+import { useAuthStore } from "@/store/useAuthStore"
 import { Timeslot } from "@/types/timeslot"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function useBooking() {
@@ -14,6 +16,8 @@ export default function useBooking() {
   const [selectedSlot, setSelectedSlot] = useState<string>("")
   const [selectedPrice, setSelectedPrice] = useState(0)
   const [error, setError] = useState<string>("")
+  const { user } = useAuthStore()
+  const router = useRouter()
 
   const dateString = date?.toLocaleDateString().replaceAll("/", "-") ?? ""
 
@@ -53,6 +57,14 @@ export default function useBooking() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      // Store booking data temporarily
+      const bookingData = { date, selectedSlot, selectedCourt }
+      sessionStorage.setItem("pendingBooking", JSON.stringify(bookingData))
+      router.push(`/login?redirect=${encodeURIComponent('/book/checkout')}`)
+      return
+    }
 
     try {
       const dataReservation = {

@@ -19,16 +19,16 @@ const Footer = () => {
         <div className='space-y-2'>
           <p className='font-bold text-secondary'>Quick Links</p>
           <div className="text-sm flex flex-col gap-1">
-            <Link href={"/"} className='hover:text-secondary'>Home</Link>
-            <Link href={"/products"} className='hover:text-secondary'>Browse Products</Link>
-            <Link href={"/orders"} className='hover:text-secondary'>Track Your Order</Link>
-            <Link href={"/about"} className='hover:text-secondary'>About Us</Link>
+            <Link href={"/#home"} className='hover:text-secondary'>Home</Link>
+            <Link href={"/#court"} className='hover:text-secondary'>Courts</Link>
+            <Link href={"/#testimonial"} className='hover:text-secondary'>Testimonial</Link>
+            <Link href={"/#contact"} className='hover:text-secondary'>Contact</Link>
           </div>
         </div>
         <div className='space-y-2'>
           <p className='text-secondary font-bold'>Get in Touch</p>
-          <a className='flex gap-2 text-sm cursor-pointer items-center'><WhatsApp />+62 853-2409-1088</a>
-          <a className='flex gap-2 text-sm cursor-pointer items-center'><Email />agripacul@itb.lpik.org</a>
+          <a className='flex gap-2 text-sm cursor-pointer items-center'><WhatsApp />+62 851-1738-8153</a>
+          <a className='flex gap-2 text-sm cursor-pointer items-center'><Email />dandimuzaki@gmail.com</a>
           <a className='flex gap-2 text-sm cursor-pointer'><LocationOn/>Jl. Cisintok Kadumulya, Cihanjuang, Kec. Parongpong, Kabupaten Bandung Barat</a>
         </div>
       </div>

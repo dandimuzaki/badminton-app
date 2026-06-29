@@ -30,7 +30,7 @@ type AvailableCourtRequest struct {
 func ToCourtRequest(query *AvailableCourtQuery) (*AvailableCourtRequest, error) {
 	var date time.Time
 	if query.Date != "" {
-		time, err := time.Parse("02-01-2006", query.Date)
+		time, err := time.Parse("2-1-2006", query.Date)
 		if err != nil {
 			return nil, err
 		}
@@ -54,7 +54,7 @@ type AvailableTimeslotRequest struct {
 func ToTimeslotRequest(query *AvailableTimeslotQuery) (*AvailableTimeslotRequest, error) {
 	var date time.Time
 	if query.Date != "" {
-		time, err := time.Parse("02-01-2006", query.Date)
+		time, err := time.Parse("2-1-2006", query.Date)
 		if err != nil {
 			return nil, err
 		}

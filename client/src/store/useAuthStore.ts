@@ -1,19 +1,27 @@
 import { User } from '@/types/user'
+import { persist } from 'zustand/middleware'
 import { create } from 'zustand'
 
-type AuthState = {
-  user: User | null
-  setUser: (user: User) => void
-  logout: () => void
+type AuthState = { 
+  user: User | null 
+  setUser: (user: User) => void 
+  logout: () => void 
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
 
-  setUser: (user) => set({ user }),
+      setUser: (user: User) => set({ user }),
 
-  logout: () => {
-    localStorage.removeItem("accessToken")
-    set({ user: null })
-  }
-}))
+      logout: () => {
+        localStorage.removeItem("access-token")
+        set({ user: null })
+      },
+    }),
+    {
+      name: 'auth-storage',
+    }
+  )
+)
