@@ -39,8 +39,8 @@ export default function useBooking() {
 
     const fetchCourts = async () => {
       const res = await getAvailableCourts({date: dateString, time_slot_id: selectedSlot})
-      setCourts(res.data)
-      if (res.data.length === 0) {
+      setCourts(res)
+      if (res.length === 0) {
         setError("No courts available for this time slot")
       } else {
         setError("")
@@ -57,6 +57,8 @@ export default function useBooking() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    console.log("user", user)
 
     if (!user) {
       // Store booking data temporarily

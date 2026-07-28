@@ -76,7 +76,7 @@ export default function Home() {
         <h2 className="text-center text-2xl md:text-4xl font-bold tetx-secondary mb-4">Courts Ready For Game</h2>
         <p className="mb-8 text-center text-sm md:text-base" onClick={() => console.log(courts)}>Indoor or outdoor, wooden or synthetic, find the court that matches your style and start playing instantly.</p>
         <div className="grid lg:grid-cols-3 md:grid-cols-2 md:gap-6 gap-4">
-          {courts?.map((c) => <CourtCard key={c.id} court={c} />)}
+          {courts?.map((c) => <CourtCard key={c.ID} court={c} />)}
         </div>
       </section>
       <section className="p-8 md:p-16 flex flex-col items-center bg-white">
@@ -106,17 +106,7 @@ export default function Home() {
               </div>
             </div>
       </section>
-      <section className="relative">
-        <div className="absolute top-0 z-0 h-full w-full">
-          <Image src={'/images/court-hero.jpg'} alt="ShuttleTime" width={900} height={1600} className="w-full h-full object-cover scale-x-[-1]" />
-          <div className="absolute z-2 bottom-0 h-full w-full bg-[linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.8))]"></div>
-        </div>
-        <div className="text-white relative z-20 text-center px-8 py-12 md:px-16 md:py-24 flex flex-col justify-center items-center gap-2 md:gap-4">
-          <h2 className="text-2xl md:text-4xl font-semibold">Book your court today and enjoy the game!</h2>
-          <p className="text-sm md:text-base">Secure your preferred time slot at our top-rated badminton courts.<br/>Fast, easy, and hassile-free booking</p>
-          <Button className="w-fit rounded-full">Book Now</Button>          
-        </div>
-      </section>
+      
       <section id="about" className="p-8 md:p-16 flex flex-col items-center">
         <SectionBadge text="Testimonial"/>
         <h2 className="text-center text-2xl md:text-4xl font-bold tetx-secondary mb-4">What Players Are Saying</h2>
@@ -130,6 +120,18 @@ export default function Home() {
           <div className="md:hidden absolute top-0 left-[-1px] h-full w-8 bg-gradient-to-r from-background to-transparent"></div>
           <div className="md:hidden absolute top-0 right-[-1px] h-full w-8 bg-gradient-to-l from-background to-transparent"></div>
           </div>
+      </section>
+
+      <section className="relative">
+        <div className="absolute top-0 z-0 h-full w-full">
+          <Image src={'/images/court-hero.jpg'} alt="ShuttleTime" width={900} height={1600} className="w-full h-full object-cover scale-x-[-1]" />
+          <div className="absolute z-2 bottom-0 h-full w-full bg-[linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.8))]"></div>
+        </div>
+        <div className="text-white relative z-20 text-center px-8 py-12 md:px-16 md:py-24 flex flex-col justify-center items-center gap-2 md:gap-4">
+          <h2 className="text-2xl md:text-4xl font-semibold">Book your court today and enjoy the game!</h2>
+          <p className="text-sm md:text-base">Secure your preferred time slot at our top-rated badminton courts.<br/>Fast, easy, and hassile-free booking</p>
+          <Button className="w-fit rounded-full">Book Now</Button>          
+        </div>
       </section>
     </>
   );

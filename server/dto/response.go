@@ -1,9 +1,14 @@
 package dto
 
-type AuthResponse struct {
+type User struct {
 	ID    uint   `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
+}
+
+type AuthResponse struct {
+	User  User   `json:"user"`
+	Token string `json:"token"`
 }
 
 type CreatePaymentResponse struct {

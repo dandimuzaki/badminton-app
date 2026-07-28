@@ -30,6 +30,8 @@ export default function Navbar() {
     visible: { opacity: 1, y: 0 },
   };
 
+  const auth = useAuthStore()
+
   return (
     <nav className="z-50 h-16 flex justify-between items-center px-6 bg-background/80 backdrop-blur-md text-white fixed top-0 w-full">
       {/* Logo */}
@@ -39,6 +41,7 @@ export default function Navbar() {
           alt="badminton-logo"
           width={130}
           height={80}
+          className="cursor-pointer"
         />
       </Link>
 
@@ -58,21 +61,25 @@ export default function Navbar() {
 
       {/* Right Section */}
       <div className="hidden md:flex items-center gap-2">
-        {user ? (
+        {user ? (<>
           <Link href="/reservations">
-            <Button className="rounded-full bg-secondary text-white">
+            <Button className="rounded-full bg-secondary text-white cursor-pointer">
               My Reservations
             </Button>
           </Link>
+            <Button onClick={() => auth.logout()} className="cursor-pointer rounded-full border border-secondary text-secondary">
+              Logout
+            </Button>
+          </>
         ) : (
           <>
             <Link href="/login">
-              <Button className="rounded-full">
+              <Button className="cursor-pointer rounded-full">
                 Login
               </Button>
             </Link>
             <Link href="/register">
-              <Button className="rounded-full bg-secondary text-white">
+              <Button className="cursor-pointer rounded-full bg-secondary text-white">
                 Register
               </Button>
             </Link>

@@ -2,20 +2,20 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  // const { token } = useAuth();
-  // const router = useRouter();
+  const token = useAuthStore((state) => state.token);
+  const router = useRouter();
 
-  // useEffect(() => {
-  //   if (!token) {
-  //     const currentPath = window.location.pathname;
-  //     router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
-  //   }
-  // }, [token, router]);
+  useEffect(() => {
+    if (!token) {
+      const currentPath = window.location.pathname;
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
+    }
+  }, [token, router]);
 
-  // if (!token) return null;
+  if (!token) return null;
 
   return <>{children}</>;
 }

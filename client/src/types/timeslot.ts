@@ -1,5 +1,5 @@
 export interface Timeslot {
-  id: number,
+  ID: number,
   start_time: string,
   end_time: string
 }

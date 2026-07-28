@@ -1,5 +1,5 @@
 export interface Court {
-  id: number,
+  ID: number,
   name: string,
   image_url: string,
   type: string,

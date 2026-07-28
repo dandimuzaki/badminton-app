@@ -1,7 +1,7 @@
-import { User } from "@/context/AuthContext";
 import { Court } from "./court";
 import { Timeslot } from "./timeslot";
 import { Payment } from "./payment";
+import { User } from "./user";
 
 export interface Reservation {
   id: number,

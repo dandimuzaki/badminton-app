@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
 import Script from "next/script";
 import { cn } from "@/lib/utils";
 
@@ -26,14 +25,12 @@ export default function RootLayout({
       <body
         className={`${dm_sans.className} antialiased`}
       >
-        <AuthProvider>
           {children}
           <Script
           src="https://app.sandbox.midtrans.com/snap/snap.js"
           data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
           strategy="afterInteractive"
         />
-        </AuthProvider>
       </body>
     </html>
   );

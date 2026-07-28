@@ -17,6 +17,7 @@ import (
 type AuthUsecase interface {
 	Register(ctx context.Context, req dto.RegisterRequest) (*dto.AuthResponse, *string, error)
 	Login(ctx context.Context, req dto.LoginRequest) (*dto.AuthResponse, *string, error)
+	
 }
 
 type authUsecase struct {
@@ -67,9 +68,12 @@ func (u *authUsecase) Register(ctx context.Context, req dto.RegisterRequest) (*d
 	}
 
 	authResponse := dto.AuthResponse{
-		ID: user.ID,
-		Name: user.Name,
-		Email: user.Email,
+		User: dto.User{
+			ID: user.ID,
+			Name: user.Name,
+			Email: user.Email,
+		},
+		Token: token,
 	}
 
 	return &authResponse, &token, nil
@@ -94,9 +98,12 @@ func (u *authUsecase) Login(ctx context.Context, req dto.LoginRequest) (*dto.Aut
 	}
 
 	authResponse := dto.AuthResponse{
-		ID: user.ID,
-		Name: user.Name,
-		Email: user.Email,
+		User: dto.User{
+			ID: user.ID,
+			Name: user.Name,
+			Email: user.Email,
+		},
+		Token: token,
 	}
 
 	return &authResponse, &token, nil

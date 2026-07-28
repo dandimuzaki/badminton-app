@@ -3,11 +3,10 @@
 import { Court } from "@/types/court";
 import { formatRupiah } from "@/utils/format";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function CourtCard({ court }: {court: Court}) {
   return (
-    <div key={court.id} className="space-y-1 md:space-y-3">
+    <div key={court.ID} className="space-y-1 md:space-y-3">
       <Image src={court.image_url} alt={court.name} width={500} height={250} className="w-full h-48 object-cover rounded-lg mb-2"/>
       <div className="space-y-2">
         <p className="text-sm md:text-sm text-secondary px-3 py-1 rounded bg-secondary/20 w-fit">{court.type}</p>

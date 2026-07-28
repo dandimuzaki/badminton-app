@@ -1,24 +1,14 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Visibility } from '@mui/icons-material'
-import { useAuth } from '@/context/AuthContext'
+import { useAuthStore } from '@/store/useAuthStore'
+import { login } from '@/services/authService'
 
 export default function LoginPage() {
-  return (
-    <div className="bg-[var(--primary)] pt-36 min-h-screen">
-      <Suspense fallback={<div>Loading...</div>}>
-        <LoginContent />
-      </Suspense>
-    </div>
-  )
-}
-
-function LoginContent() {
-  const { login } = useAuth()
   const router = useRouter()
-  const searchParams = useSearchParams() // ✅ now inside Suspense
+  const searchParams = useSearchParams()
   const prevPath = searchParams.get('redirect') || '/'
 
   const [form, setForm] = useState({ email: '', password: '' })
@@ -29,11 +19,17 @@ function LoginContent() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const loginStore = useAuthStore((state) => state.login)
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     try {
-      await login(form.email, form.password)
+      const res = await login(form.email, form.password)
+      console.log(res)
+
+      loginStore(res.user, res.token)
+
       router.push(prevPath)
     } catch (err) {
       setError('Invalid email or password')
@@ -45,8 +41,8 @@ function LoginContent() {
     <>
       <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
       <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg max-w-md mx-auto space-y-4"
+        onSubmit={handleLogin}
+        className="bg-white p-6 rounded-lg max-w-lg mx-auto space-y-4"
       >
         <div>
           <label className="font-bold">Email</label>
@@ -54,7 +50,7 @@ function LoginContent() {
             type="email"
             name="email"
             required
-            className="w-full border px-3 py-2 rounded-md"
+            className="w-full border px-3 py-2 rounded-md border-gray-500"
             onChange={handleChange}
           />
         </div>
@@ -66,14 +62,14 @@ function LoginContent() {
               type={hidePassword ? 'password' : 'text'}
               name="password"
               required
-              className="w-full px-3 py-2 rounded-l-md border-y border-l border-black"
+              className="w-full px-3 py-2 rounded-l-md border-y border-l border-gray-500"
               onChange={handleChange}
             />
             <div
               onClick={() => setHidePassword((prev) => !prev)}
               className={`${
                 hidePassword ? 'text-gray-300' : 'text-gray-700'
-              } border-black rounded-r-md border-y border-r flex items-center px-2`}
+              } border-gray-500 rounded-r-md border-y border-r flex items-center px-2`}
             >
               <Visibility />
             </div>

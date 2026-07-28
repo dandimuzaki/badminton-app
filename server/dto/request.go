@@ -67,9 +67,9 @@ func ToTimeslotRequest(query *AvailableTimeslotQuery) (*AvailableTimeslotRequest
 }
 
 type ReservationRequest struct {
-	CourtID    uint   `json:"courtId" binding:"required"`
+	CourtID    uint   `json:"court_id" binding:"required"`
 	Date       time.Time `json:"date" binding:"required"`
-	TimeSlotID uint   `json:"timeSlotId" binding:"required"`
+	TimeSlotID uint   `json:"time_slot_id" binding:"required"`
 }
 
 type PaymentRequest struct {

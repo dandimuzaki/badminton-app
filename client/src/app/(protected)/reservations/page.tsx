@@ -1,58 +1,14 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
 import { getReservations } from "@/services/reservationService";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Reservation } from "@/types/reservation";
 import { capitalize, formatDate, formatRupiah } from "@/utils/format";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export interface Reservation {
-  id: number;
-  userId: number;
-  User: {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    createdAt: string;
-  };
-  courtId: number;
-  Court: {
-    id: number;
-    name: string;
-    imageUrl: string;
-    type: string;
-    description: string;
-    location: string;
-    price: number;
-    createdAt: string;
-  };
-  date: string; // ISO date string
-  timeSlotId: number;
-  Timeslot: {
-    id: number;
-    startTime: string;
-    endTime: string;
-    createdAt: string;
-  };
-  status: "pending" | "paid" | "cancelled" | "confirmed"; // you can extend this union
-  Payment: {
-    id: number;
-    userId: number;
-    reservationId: number;
-    reservation: Reservation | null; // recursive type allowed, or use `any` if not needed
-    amount: number;
-    status: "pending" | "paid" | "failed";
-    transactionId: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
 export default function MyReservationPage() {
-  const { token } = useAuth()
+  const { token } = useAuthStore()
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true)
 
@@ -76,7 +32,7 @@ export default function MyReservationPage() {
 
   return (
     <div className="md:pt-28 pt-20 px-8 py-4 md:px-20 md:py-16 min-h-screen">
-      <h1 className="text-center text-2xl font-bold mb-2">My Reservations</h1>
+      {/* <h1 className="text-center text-2xl font-bold mb-2">My Reservations</h1>
       <p className="mb-10 text-center">See all your bookings and don’t forget your play time!</p>
       {loading ? (<p>Loading...</p>) : reservations.length > 0 ? (<section>
         <div className="grid lg:grid-cols-2 md:grid-cols-2 md:gap-6 gap-4">
@@ -102,7 +58,7 @@ export default function MyReservationPage() {
         </div>
       </section>)
     : (<p className="text-gray-400">You haven’t made any reservations yet.</p>)  
-    }
+    } */}
     </div>
   );
 }
