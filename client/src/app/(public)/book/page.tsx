@@ -12,8 +12,6 @@ export default function BookPage() {
     error, handleSelectCourt, handleSubmit
   } = useBooking()
 
-  console.log("courts", courts)
-
   return (
     <div className="md:pt-28 pt-20 px-8 py-4 md:px-20 md:py-16 min-h-screen">
       <h1 className="text-center text-2xl font-bold mb-2">Book a Badminton Court</h1>

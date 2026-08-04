@@ -30,7 +30,7 @@ type AvailableCourtRequest struct {
 func ToCourtRequest(query *AvailableCourtQuery) (*AvailableCourtRequest, error) {
 	var date time.Time
 	if query.Date != "" {
-		time, err := time.Parse("2-1-2006", query.Date)
+		time, err := time.Parse("2006-01-02", query.Date)
 		if err != nil {
 			return nil, err
 		}
@@ -54,7 +54,7 @@ type AvailableTimeslotRequest struct {
 func ToTimeslotRequest(query *AvailableTimeslotQuery) (*AvailableTimeslotRequest, error) {
 	var date time.Time
 	if query.Date != "" {
-		time, err := time.Parse("2-1-2006", query.Date)
+		time, err := time.Parse("2006-01-02", query.Date)
 		if err != nil {
 			return nil, err
 		}
@@ -66,10 +66,33 @@ func ToTimeslotRequest(query *AvailableTimeslotQuery) (*AvailableTimeslotRequest
 	}, nil
 }
 
+type ReservationQuery struct {
+	CourtID    uint   `json:"court_id" binding:"required"`
+	Date       string `json:"date" binding:"required"`
+	TimeSlotID uint   `json:"time_slot_id" binding:"required"`
+}
+
 type ReservationRequest struct {
 	CourtID    uint   `json:"court_id" binding:"required"`
 	Date       time.Time `json:"date" binding:"required"`
 	TimeSlotID uint   `json:"time_slot_id" binding:"required"`
+}
+
+func ToReservationRequest(query *ReservationQuery) (*ReservationRequest, error) {
+	var date time.Time
+	if query.Date != "" {
+		time, err := time.Parse("2006-01-02", query.Date)
+		if err != nil {
+			return nil, err
+		}
+		date = time
+	}
+	
+	return &ReservationRequest{
+		Date: date,
+		CourtID: query.CourtID,
+		TimeSlotID: query.TimeSlotID,
+	}, nil
 }
 
 type PaymentRequest struct {

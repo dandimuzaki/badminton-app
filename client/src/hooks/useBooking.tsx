@@ -4,7 +4,9 @@ import { getAvailableCourts, getAvailableTimeslots } from "@/services/availabili
 import { createPayment } from "@/services/paymentService"
 import { createReservation } from "@/services/reservationService"
 import { useAuthStore } from "@/store/useAuthStore"
+import { ReservationRequest } from "@/types/reservation"
 import { Timeslot } from "@/types/timeslot"
+import { formatDate } from "@/utils/format"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -19,16 +21,14 @@ export default function useBooking() {
   const { user } = useAuthStore()
   const router = useRouter()
 
-  const dateString = date?.toLocaleDateString().replaceAll("/", "-") ?? ""
-
   useEffect(() => {
     if (!date) return
     const fetchSlots = async () => {
-      const res = await getAvailableTimeslots({date: dateString})
+      const res = await getAvailableTimeslots({date: formatDate(date)})
       setTimeSlots(res)
     }
     fetchSlots()
-  }, [date, dateString])
+  }, [date])
 
   useEffect(() => {
     if (!date || !selectedSlot) {
@@ -38,7 +38,7 @@ export default function useBooking() {
     }
 
     const fetchCourts = async () => {
-      const res = await getAvailableCourts({date: dateString, time_slot_id: selectedSlot})
+      const res = await getAvailableCourts({date: formatDate(date), time_slot_id: selectedSlot})
       setCourts(res)
       if (res.length === 0) {
         setError("No courts available for this time slot")
@@ -48,7 +48,7 @@ export default function useBooking() {
     }
 
     fetchCourts()
-  }, [date, selectedSlot, dateString])
+  }, [date, selectedSlot])
 
   const handleSelectCourt = (id: string, price: number) => {
     setSelectedCourt(id)
@@ -57,8 +57,6 @@ export default function useBooking() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("user", user)
 
     if (!user) {
       // Store booking data temporarily
@@ -69,10 +67,10 @@ export default function useBooking() {
     }
 
     try {
-      const dataReservation = {
-        date,
-        courtId: Number(selectedCourt),
-        timeSlotId: Number(selectedSlot),
+      const dataReservation: ReservationRequest = {
+        date: formatDate(date),
+        court_id: Number(selectedCourt),
+        time_slot_id: Number(selectedSlot),
       };
       const reservation = await createReservation(dataReservation);
 

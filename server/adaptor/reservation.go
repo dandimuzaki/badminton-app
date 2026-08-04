@@ -33,13 +33,19 @@ func (h *ReservationHandler) GetReservationHistory(c *gin.Context) {
 }
 
 func (h *ReservationHandler) CreateReservation(c *gin.Context) {
-	var req dto.ReservationRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var query dto.ReservationQuery
+	if err := c.ShouldBindJSON(&query); err != nil {
 		utils.ResponseFailed(c, http.StatusBadRequest, "invalid request body", err.Error())
 		return
 	}
 
-	if err := h.Usecase.CreateReservation(c, req); err != nil {
+	req, err := dto.ToReservationRequest(&query)
+	if err != nil {
+		utils.ResponseFailed(c, http.StatusBadRequest, "invalid request body", err.Error())
+		return
+	}
+
+	if err := h.Usecase.CreateReservation(c, *req); err != nil {
 		utils.ResponseFailed(c, http.StatusBadRequest, "failed to create reservation", err.Error())
 		return
 	}

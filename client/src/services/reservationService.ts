@@ -1,6 +1,7 @@
 import api from "@/lib/api";
+import { ReservationRequest } from "@/types/reservation";
 
-export async function createReservation(data: object) {
+export async function createReservation(data: ReservationRequest) {
   const res = await api.post("/reservations", data);
   return res.data;
 }

@@ -16,3 +16,9 @@ export interface Reservation {
   timeslot: Timeslot,
   payment: Payment
 }
+
+export interface ReservationRequest {
+  court_id: number,
+  date: string,
+  time_slot_id: number,
+}
