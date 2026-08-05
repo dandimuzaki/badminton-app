@@ -47,7 +47,10 @@ func (r *paymentRepository) FindPaymentByID(ctx context.Context, id uint) (*mode
 
 func (r *paymentRepository) PaymentCallback(ctx context.Context, payload dto.PaymentCallback) error {
 	db := infra.GetDB(ctx, r.DB)
-	if err := db.Where("transaction_id = ?", payload.OrderID).Update("status", payload.Status).Error; err != nil {
+	if err := db.Model(model.Payment{}).Where("transaction_id = ?", payload.OrderID).
+		Updates(map[string]interface{}{
+      "status": "expire",
+    }).Error; err != nil {
 		r.Log.Error(err.Error())
 		return err
 	}
