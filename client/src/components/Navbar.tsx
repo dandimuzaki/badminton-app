@@ -67,7 +67,7 @@ export default function Navbar() {
               My Reservations
             </Button>
           </Link>
-            <Button onClick={() => auth.logout()} className="cursor-pointer rounded-full border border-secondary text-secondary">
+            <Button onClick={() => auth.logout()} className="cursor-pointer rounded-full border border-secondary text-secondary bg-transparent">
               Logout
             </Button>
           </>

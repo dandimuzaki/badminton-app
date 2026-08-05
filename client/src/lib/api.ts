@@ -31,7 +31,6 @@ api.interceptors.response.use(
     return response.data // fallback (if not wrapped)
   },
   (error) => {
-    console.log("error", error)
     // Handle 401 globally
     if (error.response?.status === 401) {
       localStorage.removeItem("token")

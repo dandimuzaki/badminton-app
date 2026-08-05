@@ -74,7 +74,7 @@ export default function Home() {
       <section id="about" className="p-8 md:p-16 flex flex-col items-center">
         <SectionBadge text="Our Courts"/>
         <h2 className="text-center text-2xl md:text-4xl font-bold tetx-secondary mb-4">Courts Ready For Game</h2>
-        <p className="mb-8 text-center text-sm md:text-base" onClick={() => console.log(courts)}>Indoor or outdoor, wooden or synthetic, find the court that matches your style and start playing instantly.</p>
+        <p className="mb-8 text-center text-sm md:text-base">Indoor or outdoor, wooden or synthetic, find the court that matches your style and start playing instantly.</p>
         <div className="grid lg:grid-cols-3 md:grid-cols-2 md:gap-6 gap-4">
           {courts?.map((c) => <CourtCard key={c.ID} court={c} />)}
         </div>

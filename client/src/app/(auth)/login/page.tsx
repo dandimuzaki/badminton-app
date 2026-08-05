@@ -26,7 +26,6 @@ export default function LoginPage() {
     setError('')
     try {
       const res = await login(form.email, form.password)
-      console.log(res)
 
       loginStore(res.user, res.token)
 

@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/home/footer";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token);
@@ -17,5 +19,11 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
   if (!token) return null;
 
-  return <>{children}</>;
+  return (
+    <main className="min-h-screen">
+      <Navbar />
+      {children}
+      <Footer/>
+    </main>
+  );
 }

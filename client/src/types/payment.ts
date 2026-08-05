@@ -5,3 +5,8 @@ export interface Payment {
   status: string,
   transaction_id: string
 }
+
+export interface PaymentRequest {
+  reservation_id: number,
+  amount: number
+}

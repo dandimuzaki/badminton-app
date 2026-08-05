@@ -1,7 +1,6 @@
 "use client"
 
 import { getAvailableCourts, getAvailableTimeslots } from "@/services/availabilityService"
-import { createPayment } from "@/services/paymentService"
 import { createReservation } from "@/services/reservationService"
 import { useAuthStore } from "@/store/useAuthStore"
 import { ReservationRequest } from "@/types/reservation"
@@ -9,6 +8,7 @@ import { Timeslot } from "@/types/timeslot"
 import { formatDate } from "@/utils/format"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import usePayment from "./usePayment"
 
 export default function useBooking() {
   const [date, setDate] = useState<Date | undefined>(undefined)
@@ -20,6 +20,7 @@ export default function useBooking() {
   const [error, setError] = useState<string>("")
   const { user } = useAuthStore()
   const router = useRouter()
+  const {handlePayment} = usePayment()
 
   useEffect(() => {
     if (!date) return
@@ -73,36 +74,13 @@ export default function useBooking() {
         time_slot_id: Number(selectedSlot),
       };
       const reservation = await createReservation(dataReservation);
-      console.log(reservation)
 
       const dataPayment = {
         reservation_id: reservation.ID,
         amount: selectedPrice,
       };
-      const payment = await createPayment(dataPayment);
-
-      if (typeof window.snap === "undefined") {
-        alert("Midtrans Snap is not loaded yet. Please refresh.");
-        return;
-      }
-
-      window.snap.pay(payment.snapToken, {
-        onSuccess: async function (result) {
-          console.log("✅ Payment success:", result);
-          alert("Payment successful!");
-        },
-        onPending: function (result) {
-          console.log("⏳ Payment pending:", result);
-          alert("Payment pending. Please wait for confirmation.");
-        },
-        onError: function (result) {
-          console.error("❌ Payment error:", result);
-          alert("Payment failed. Please try again.");
-        },
-        onClose: function () {
-          console.log("⚠️ Payment popup closed before finishing");
-        },
-      });
+      
+      handlePayment(dataPayment)
     } catch (err) {
       console.error("Failed to create reservation or payment:", err);
       alert("Something went wrong while processing your payment.");

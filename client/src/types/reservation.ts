@@ -4,7 +4,7 @@ import { Payment } from "./payment";
 import { User } from "./user";
 
 export interface Reservation {
-  id: number,
+  ID: number,
   user_id: number,
   court_id: number,
   date: string,
