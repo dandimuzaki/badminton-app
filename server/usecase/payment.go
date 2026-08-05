@@ -85,9 +85,6 @@ func (u *paymentUsecase) CreatePayment(ctx context.Context, req dto.PaymentReque
 
 	// Create transaction
 	snapResp, err := s.CreateTransaction(transaction)
-	if err != nil {
-		return nil, err
-	}
 
 	// Save payment record into database
 	payment := model.Payment{

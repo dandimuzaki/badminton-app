@@ -73,9 +73,10 @@ export default function useBooking() {
         time_slot_id: Number(selectedSlot),
       };
       const reservation = await createReservation(dataReservation);
+      console.log(reservation)
 
       const dataPayment = {
-        reservationId: reservation.id,
+        reservation_id: reservation.ID,
         amount: selectedPrice,
       };
       const payment = await createPayment(dataPayment);
