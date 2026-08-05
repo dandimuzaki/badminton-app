@@ -41,12 +41,12 @@ export default function Home() {
             <h1 className="text-white text-3xl md:text-6xl/15 mb-4">Reserve Your Badminton<br/>Court in Just Seconds</h1>
             <p className="text-white text-base/5 md:text-lg mb-6">Book badminton courts anytime, anywhere — no waiting, no hassle. Just pick a court, grab your racket, and play your best game.</p>
             <div className="flex gap-2 items-center md:justify-start justify-center">
-              <Link href="/reservations/new">
+              <Link href="/book">
                 <Button className="hover:bg-secondary hover:text-white py-2 text-secondary rounded-full bg-background px-4 text-base font-semibold">Book Now</Button>
               </Link>
-              <Link href="/reservations/new">
+              {/* <Link href="/">
                 <Button className="hover:bg-primary hover:border-primary hover:text-secondary border border-white py-2 text-white rounded-full bg-transparent px-4 text-base font-semibold">Book Now</Button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -130,7 +130,10 @@ export default function Home() {
         <div className="text-white relative z-20 text-center px-8 py-12 md:px-16 md:py-24 flex flex-col justify-center items-center gap-2 md:gap-4">
           <h2 className="text-2xl md:text-4xl font-semibold">Book your court today and enjoy the game!</h2>
           <p className="text-sm md:text-base">Secure your preferred time slot at our top-rated badminton courts.<br/>Fast, easy, and hassile-free booking</p>
-          <Button className="w-fit rounded-full">Book Now</Button>          
+          <Link href={"/book"}>
+            <Button className="w-fit rounded-full">Book Now</Button>  
+          </Link>
+                  
         </div>
       </section>
     </>

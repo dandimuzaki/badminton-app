@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useState } from "react"
 import { Button } from "../ui/button"
 import SectionBadge from "./section-badge"
+import Link from "next/link"
 
 export default function ServiceSection() {
   const data = [
@@ -89,7 +90,10 @@ export default function ServiceSection() {
                 <div className="text-white flex flex-col justify-end overflow-hidden">
                   <h3 className="text-xl md:text-3xl font-semibold mb-2">{s.name}</h3>
                   <p className="mb-4 text-sm md:text-base">{s.description}</p>
-                  <Button className="w-fit rounded-full">Book Now</Button>
+                  <Link href="/book">
+                    <Button className="w-fit rounded-full">Book Now</Button>
+                  </Link>
+                  
                 </div>
               </div>
             ) : (
