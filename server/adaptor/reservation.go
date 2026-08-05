@@ -1,6 +1,7 @@
 package adaptor
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/dandimuzaki/badminton-server/dto"
@@ -35,17 +36,20 @@ func (h *ReservationHandler) GetReservationHistory(c *gin.Context) {
 func (h *ReservationHandler) CreateReservation(c *gin.Context) {
 	var query dto.ReservationQuery
 	if err := c.ShouldBindJSON(&query); err != nil {
+		log.Print(err)
 		utils.ResponseFailed(c, http.StatusBadRequest, "invalid request body", err.Error())
 		return
 	}
 
 	req, err := dto.ToReservationRequest(&query)
 	if err != nil {
+		log.Print(err)
 		utils.ResponseFailed(c, http.StatusBadRequest, "invalid request body", err.Error())
 		return
 	}
 
 	if err := h.Usecase.CreateReservation(c, *req); err != nil {
+		log.Print(err)
 		utils.ResponseFailed(c, http.StatusBadRequest, "failed to create reservation", err.Error())
 		return
 	}

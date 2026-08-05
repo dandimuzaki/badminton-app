@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -18,6 +19,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		claims, err := utils.ParseToken(token)
 		if err != nil {
+			log.Print(err)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			return
 		}
