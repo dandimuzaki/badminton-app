@@ -11,7 +11,7 @@ import (
 )
 
 type ReservationUsecase interface {
-	CreateReservation(ctx context.Context, req dto.ReservationRequest) error
+	CreateReservation(ctx context.Context, req dto.ReservationRequest) (*model.Reservation, error)
 	GetReservationHistory(ctx context.Context) ([]model.Reservation, error)
 	CancelReservation(ctx context.Context, id uint) error
 }
@@ -28,18 +28,18 @@ func NewReservationUsecase(repo *repository.Repository, log *zap.Logger) Reserva
 	}
 }
 
-func (u *reservationUsecase) CreateReservation(ctx context.Context, req dto.ReservationRequest) error {
+func (u *reservationUsecase) CreateReservation(ctx context.Context, req dto.ReservationRequest) (*model.Reservation, error) {
 	// Get user id
 	userID, ok := ctx.Value("user_id").(uint)
 	if !ok {
-		return utils.ErrInvalidUserID
+		return nil, utils.ErrInvalidUserID
 	}
 	
 	// Check if timeslot already booked for that court
 	existing, err := u.Repo.ReservationRepo.GetExistingReservation(ctx, req)
 	if existing != nil {
 		u.Log.Error("Court is already booked", zap.Error(err))
-		return utils.ErrCourtAlreadyBooked
+		return nil, utils.ErrCourtAlreadyBooked
 	}
 
 	// Create reservation with "pending" status
@@ -51,13 +51,13 @@ func (u *reservationUsecase) CreateReservation(ctx context.Context, req dto.Rese
 		Status:     model.ReservationPending,
 	}
 
-	err = u.Repo.ReservationRepo.CreateReservation(ctx, &reservation)
+	reservation, err = u.Repo.ReservationRepo.CreateReservation(ctx, &reservation)
 	if err != nil {
 		u.Log.Error("Failed to create reservation", zap.Error(err))
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &reservation, nil
 }
 
 func (u *reservationUsecase) GetReservationHistory(ctx context.Context) ([]model.Reservation, error) {

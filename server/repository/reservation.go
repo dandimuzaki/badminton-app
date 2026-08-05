@@ -11,7 +11,7 @@ import (
 )
 
 type ReservationRepository interface {
-	CreateReservation(ctx context.Context, reservation *model.Reservation) error
+	CreateReservation(ctx context.Context, reservation *model.Reservation) (model.Reservation, error)
 	GetReservationHistory(ctx context.Context, userID uint) ([]model.Reservation, error)
 	GetReservationByID(ctx context.Context, id uint) (*model.Reservation, error)
 	UpdateReservation(ctx context.Context, id uint, data map[string]interface{}) error
@@ -31,13 +31,13 @@ func NewReservationRepository(db *gorm.DB, log *zap.Logger) ReservationRepositor
 	}
 }
 
-func (r *reservationRepository) CreateReservation(ctx context.Context, reservation *model.Reservation) error {
+func (r *reservationRepository) CreateReservation(ctx context.Context, reservation *model.Reservation) (model.Reservation, error) {
 	db := infra.GetDB(ctx, r.DB)
 	if err := db.Create(reservation).Error; err != nil {
 		r.Log.Error("Failed to create reservation", zap.Error(err))
-		return err
+		return model.Reservation{}, err
 	}
-	return nil
+	return *reservation, nil
 }
 
 func (r *reservationRepository) GetReservationHistory(ctx context.Context, userID uint) ([]model.Reservation, error) {

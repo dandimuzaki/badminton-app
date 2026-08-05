@@ -75,7 +75,7 @@ export default function useBooking() {
       const reservation = await createReservation(dataReservation);
 
       const dataPayment = {
-        reservationId: reservation.data.id,
+        reservationId: reservation.id,
         amount: selectedPrice,
       };
       const payment = await createPayment(dataPayment);

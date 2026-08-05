@@ -48,13 +48,14 @@ func (h *ReservationHandler) CreateReservation(c *gin.Context) {
 		return
 	}
 
-	if err := h.Usecase.CreateReservation(c, *req); err != nil {
+	reservation, err := h.Usecase.CreateReservation(c, *req)
+	if err != nil {
 		log.Print(err)
 		utils.ResponseFailed(c, http.StatusBadRequest, "failed to create reservation", err.Error())
 		return
 	}
 
-	utils.ResponseSuccess(c, http.StatusCreated, "success to create reservation", nil)
+	utils.ResponseSuccess(c, http.StatusCreated, "success to create reservation", reservation)
 }
 
 func (h *ReservationHandler) CancelReservation(c *gin.Context) {
