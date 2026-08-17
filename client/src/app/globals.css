@@ -41,8 +41,8 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-* {
-  /*border: 1px solid red;*/
+.bg-primary-dark {
+  background-color: var(--primary-dark);
 }
 
 @theme inline {

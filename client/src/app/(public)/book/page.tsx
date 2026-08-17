@@ -12,46 +12,58 @@ export default function BookPage() {
     error, handleSelectCourt, handleSubmit
   } = useBooking()
 
+  const today = new Date()
+
   return (
     <div className="md:pt-28 pt-20 px-8 py-4 md:px-20 md:py-16 min-h-screen">
       <h1 className="text-center text-2xl font-bold mb-2">Book a Badminton Court</h1>
       <p className="mb-10 text-center">Choose your preferred date, time, and court.</p>
-      <form onSubmit={handleSubmit} className="grid md:grid-cols-[2fr_3fr] gap-4">
-        <div className="space-y-8">
-          {/* Date Input */}
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">Select Date</label>
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              className="rounded-lg border"
-              captionLayout="dropdown"
-            />
+      <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-x-4 gap-y-8">
+        {/* Date Input */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Select Date</label>
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="rounded-lg border"
+            captionLayout="dropdown"
+            disabled={{ before: today }}
+          />
+        </div>
+        
+        {/* Timeslot Dropdown */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Select Time Slot</label>
+          <div className="flex flex-wrap max-w-lg gap-2 items-center">
+            {timeSlots?.length > 0 ? (
+              timeSlots.map((t) => (
+                <div key={t.ID} onClick={() => setSelectedSlot(t.ID)}
+                  className={`${selectedSlot == t.ID ? 'bg-primary-dark text-white' : 'bg-white text-black'} px-4 py-2 rounded shadow`}
+                >
+                  {t.start_time}–{t.end_time}
+                </div>
+              ))
+            ) : (
+              <option disabled>No slots available</option>
+            )}
           </div>
-
-          {/* Timeslot Dropdown */}
-          {(
-            <div>
-              <label className="block mb-1 font-medium text-gray-700">Time Slot</label>
-              <select
-                value={selectedSlot}
-                onChange={(e) => setSelectedSlot(e.target.value)}
-                className="border p-2 rounded w-full"
-              >
-                <option value="">Select Time</option>
-                {timeSlots?.length > 0 ? (
-                  timeSlots.map((t) => (
-                    <option key={t.ID} value={t.ID}>
-                      {t.start_time}–{t.end_time}
-                    </option>
-                  ))
-                ) : (
-                  <option disabled>No slots available</option>
-                )}
-              </select>
-            </div>
-          )}
+          {/* <select
+            value={selectedSlot}
+            onChange={(e) => setSelectedSlot(Number(e.target.value))}
+            className="border p-2 rounded w-full"
+          >
+            <option value="">Select Time</option>
+            {timeSlots?.length > 0 ? (
+              timeSlots.map((t) => (
+                <option key={t.ID} value={t.ID}>
+                  {t.start_time}–{t.end_time}
+                </option>
+              ))
+            ) : (
+              <option disabled>No slots available</option>
+            )}
+          </select> */}
         </div>
 
         {/* Court Select */}

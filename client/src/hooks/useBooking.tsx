@@ -14,8 +14,8 @@ export default function useBooking() {
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [timeSlots, setTimeSlots] = useState<Timeslot[]>([])
   const [courts, setCourts] = useState([])
-  const [selectedCourt, setSelectedCourt] = useState<string>("")
-  const [selectedSlot, setSelectedSlot] = useState<string>("")
+  const [selectedCourt, setSelectedCourt] = useState<number>()
+  const [selectedSlot, setSelectedSlot] = useState<number>()
   const [selectedPrice, setSelectedPrice] = useState(0)
   const [error, setError] = useState<string>("")
   const { user } = useAuthStore()
@@ -51,7 +51,7 @@ export default function useBooking() {
     fetchCourts()
   }, [date, selectedSlot])
 
-  const handleSelectCourt = (id: string, price: number) => {
+  const handleSelectCourt = (id: number, price: number) => {
     setSelectedCourt(id)
     setSelectedPrice(price)
   }

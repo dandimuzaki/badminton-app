@@ -10,5 +10,5 @@ export interface Court {
 
 export interface CourtQuery {
   date: string,
-  time_slot_id: string
+  time_slot_id: number
 }
